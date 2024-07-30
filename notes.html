@@ -922,6 +922,71 @@
             
             fetchUsers().then((users: FetchUsersReturnType) => console.log(users));
         </p>
+        <h2>Difficult to grasp</h2>
+        <p>
+
+            /************ Most confusing part of TypeScript *****************/
+            // type assertion
+            // keyof operator returns a union type of string literals
+            // e.g.,
+            type Attributes = {
+              age: number;
+              name: string;
+              active: boolean;
+            };
+            
+            // keyof attributes === "age" | "name" | "active"
+            
+            // now what does "as" do in these following 2 cases,
+            const apple: Attributes = {
+              age: 1,
+              name: "apple",
+              active: true,
+            };
+            
+            // here, "name" as keyof Attributes
+            // asserting that "name" is a valid key of Attributes type object "apple"
+            const fruitName = apple["name" as keyof Attributes];
+            
+            const getKeys = <T>(arg: T): string[] => {
+              // here, "arg" as keyof T
+              // asserting that, "arg" is a valid object that has properties with specific keys
+              // returned by keyof T
+              const appleKeys = Object.keys(arg as keyof T);
+              return appleKeys;
+            };
+            
+            // generic type extending interface
+            interface HasId {
+              id: string;
+            }
+            
+            const processUser = <T extends HasId>(user: T): T => {
+              return user;
+            };
+            
+            // complex generic example
+            const getUserProperty = <T extends HasId, K extends keyof T>(
+              users: T[],
+              key: K
+            ): T[K][] => {
+              return users.map((user) => user[key]);
+            };
+            
+            const users = [
+              { username: "protick", age: 30, active: true, id: "1" },
+              { username: "john", age: 25, active: false, id: "2" },
+              { username: "doe", age: 20, active: true, id: "3" },
+            ];
+            
+            const usersUserNames = getUserProperty(users, "username");
+            
+            console.log(usersUserNames);
+            
+            // defining type at the time of passing argument to a generic class
+            const anotherState1 = new StateObject<(string | number | boolean)[]>([12]);
+            
+        </p>
         </pre>
     </main>
 </body>
